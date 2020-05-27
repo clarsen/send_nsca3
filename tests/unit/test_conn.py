@@ -1,10 +1,10 @@
 import socket
 
 import mock
-from unittest2 import TestCase
+from unittest import TestCase
 
-import send_nsca
-from send_nsca.nsca import DEFAULT_PORT
+import send_nsca3
+from send_nsca3.nsca import DEFAULT_PORT
 
 
 class TestConnectionLogic(TestCase):
@@ -20,7 +20,7 @@ class TestConnectionLogic(TestCase):
     sigil_two = object()
 
     def setUp(self):
-        self.sender = send_nsca.NscaSender(b'test_host', config_path=None)
+        self.sender = send_nsca3.NscaSender(b'test_host', config_path=None)
 
     def test_no_result_fails(self):
         mock_getaddrinfo = mock.Mock(return_value=[])

@@ -10,9 +10,9 @@ import subprocess
 import tempfile
 import time
 
-from unittest2 import TestCase
+from unittest import TestCase
 
-from send_nsca.nsca import NscaSender
+from send_nsca3 import nsca
 
 
 NSCA_CFG_TEMPLATE = """
@@ -22,7 +22,7 @@ decryption_method=%(crypto_method)d
 max_packet_age=30
 command_file=%(command_file)s
 append_to_file=0
-debug=0
+debug=1
 server_port=%(port)s
 aggregate_writes=0
 """
@@ -55,7 +55,7 @@ ServiceCheckResult = collections.namedtuple("ServiceCheckResult", ["host_name", 
 class NSCATestCase(TestCase):
 
     crypto_method = 1
-    max_read_time = 4
+    max_read_time = 30
 
     def _start_nsca(self):
         with open(self.nsca_config_path, 'w') as f:
@@ -89,7 +89,8 @@ class NSCATestCase(TestCase):
             if len(lines) == n_checks:
                 break
         else:
-            raise AssertionError("Read %d lines after %0.2fs, expected %d" % (len(lines), (now - start_time), n_checks))
+            raise AssertionError("Read {0} lines after {1}s, expected {2}"
+                                 .format(len(lines), (now - start_time), n_checks))
         return lines
 
     @property
@@ -97,7 +98,7 @@ class NSCATestCase(TestCase):
         return {'remote_host': '127.0.0.1', 'port': self.server_port, 'config_path': self.send_nsca_config_path}
 
     def nsca_sender(self):
-        return NscaSender(**self.nsca_sender_args)
+        return nsca.NscaSender(**self.nsca_sender_args)
 
     @staticmethod
     def parse_line(l):
@@ -117,7 +118,7 @@ class NSCATestCase(TestCase):
         self.working_directory = tempfile.mkdtemp()
         self.fifo_name = os.path.join(self.working_directory, 'nsca_fifo')
         self.nsca_config_path = os.path.join(self.working_directory, 'nsca.cfg')
-        self.send_nsca_config_path = os.path.join(self.working_directory, 'send_nsca.cfg')
+        self.send_nsca_config_path = os.path.join(self.working_directory, 'send_nsca3.cfg')
         os.mkfifo(self.fifo_name)
         read_fd = os.open(self.fifo_name, os.O_RDONLY | os.O_NONBLOCK)
         self.read_end = os.fdopen(read_fd)

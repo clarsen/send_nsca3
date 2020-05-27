@@ -4,9 +4,9 @@ from .nsca import NscaSender, log
 # make pyflakes happy
 States = States
 
-version_info = (0, 1, 4, 1)
-__version__ = ".".join(map(str, version_info)) + '-yelp1'
-__author__ = "James Brown <jbrown@yelp.com>"
+version_info = (0, 1, 5, 2)
+__version__ = ".".join(map(str, version_info))
+# __author__ = "James Brown <jbrown@yelp.com>"
 
 
 def send_nsca(status, host_name, service_name, text_output, remote_host, **kwargs):
@@ -30,7 +30,7 @@ def send_nsca(status, host_name, service_name, text_output, remote_host, **kwarg
 
 
 def nsca_ok(host_name, service_name, text_output, remote_host, **kwargs):
-    """Wrapper for the send_nsca() function to easily send an OK
+    """Wrapper for the send_nsca3() function to easily send an OK
 
     Arguments:
         host_name: Host name to report as
@@ -51,7 +51,7 @@ def nsca_ok(host_name, service_name, text_output, remote_host, **kwargs):
 
 
 def nsca_warning(host_name, service_name, text_output, remote_host, **kwargs):
-    """Wrapper for the send_nsca() function to easily send a WARNING
+    """Wrapper for the send_nsca3() function to easily send a WARNING
 
     Arguments:
         host_name: Host name to report as
@@ -72,7 +72,7 @@ def nsca_warning(host_name, service_name, text_output, remote_host, **kwargs):
 
 
 def nsca_critical(host_name, service_name, text_output, remote_host, **kwargs):
-    """Wrapper for the send_nsca() function to easily send a CRITICAL
+    """Wrapper for the send_nsca3() function to easily send a CRITICAL
 
     Arguments:
         host_name: Host name to report as
@@ -93,7 +93,7 @@ def nsca_critical(host_name, service_name, text_output, remote_host, **kwargs):
 
 
 def nsca_unknown(host_name, service_name, text_output, remote_host, **kwargs):
-    """Wrapper for the send_nsca() function to easily send an UNKNONW
+    """Wrapper for the send_nsca3() function to easily send an UNKNONW
 
     Arguments:
         host_name: Host name to report as

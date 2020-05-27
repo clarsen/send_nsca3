@@ -1,9 +1,9 @@
 #!/usr/bin/python
 #
-# send_nsca.py: A replacement for the C-based send_nsca, able
+# send_nsca3.py: A replacement for the C-based send_nsca3, able
 # to be run in pure-python. Depends on PyCrypto and Python >= 2.6.
 #
-# Heavily inspired by (and protocol-compatible with) the original send_nsca,
+# Heavily inspired by (and protocol-compatible with) the original send_nsca3,
 # written by Ethan Galstad <nagios@nagios.org>, which was available under
 # the terms of the GNU General Public License v2.
 #
@@ -23,7 +23,6 @@ from __future__ import with_statement
 
 import array
 import binascii
-import functools
 import logging
 import math
 import os
@@ -53,7 +52,8 @@ PACKET_VERSION = 3
 
 DEFAULT_PORT = 5667
 
-log = logging.getLogger("send_nsca")
+logging.basicConfig()
+log = logging.getLogger("send_nsca3")
 
 ########  CIPHERS AND CRYPTERS IMPLEMENTATION ########
 

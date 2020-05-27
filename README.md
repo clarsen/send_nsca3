@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.org/Roguelazer/send_nsca.png?branch=master)](https://travis-ci.org/Roguelazer/send_nsca)
 
-
 Overview
 ----
 NSCA is the remote passive acceptance daemon used with many Nagios installs. It
@@ -8,6 +7,12 @@ ships with a (C-language) executable called `send_nsca` for submitting checks.
 This is a mostly-clean re-implementation of `send_nsca` in pure-python. It
 supports 10 of the 26 crypto functions used by upstream NSCA, sending to
 multiple hosts with one invocation, and timeouts.
+
+Why send_nsca3?
+----
+Python3 compatible version of send_nsca, packaged for pypi installation. Just a
+personal convenience thing, as as none of libraries for sending nsca checks 
+support python3, and the projects don't seem active.
 
 Credits/Copyright/License
 ---
@@ -17,7 +22,7 @@ Credits/Copyright/License
 Testing
 -----
 The unit/integration tests for this package are located in the `tests/`
-directory.  Unit tests only require the unittest2 package (or python 2.7+)
+directory.  Unit tests only require the unittest package (or python 2.7+)
 and the mock library; integration tests also require the `nsca` binary. To
 run them, simply make sure that your `$PYTHONPATH` is set up correctly and
 run `nosetests -v tests`.
