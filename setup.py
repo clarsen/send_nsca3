@@ -5,7 +5,7 @@ except ImportError:
 
 setup(
     name="send_nsca3",
-    version="0.1.5.2",
+    version="0.1.5.3",
     author="gitmstoute",
     author_email="",
     url="https://github.com/gitmstoute/send_nsca3",
