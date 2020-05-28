@@ -24,7 +24,7 @@ setup(
     packages=["send_nsca3"],
     provides=["send_nsca3"],
     install_requires=["pycrypto>=2.0.0", 'six'],
-    tests_require=["nose", "mock==1.0.1"],
+    tests_require=["nose", "mock>=1.0.1"],
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown'
 )
