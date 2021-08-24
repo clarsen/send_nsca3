@@ -29,6 +29,7 @@ import os
 import random
 import socket
 import struct
+import sys
 
 import Crypto.Cipher.AES
 import Crypto.Cipher.ARC2
@@ -39,6 +40,7 @@ import Crypto.Cipher.CAST
 import Crypto.Util.randpool
 import six
 
+from typing import Union
 from . import nagios
 
 MAX_PASSWORD_LENGTH = 512
@@ -222,6 +224,20 @@ def get_random_alphanumeric_bytes(bytesz):
     return ''.join(chr(random.randrange(ord('0'), ord('Z'))) for _ in range(bytesz)).encode('US-ASCII')
 
 
+def _bytes(value: Union[str, bytes]) -> bytes:
+    """Convert str into bytes. To allow `bytes` input as well as `str` for
+    the arguemnts `host`, `service` and `description`.
+
+    :param value: Input as str or bytes.
+    """
+    if isinstance(value, bytes):
+        return value
+    elif isinstance(value, str):
+        return value.encode('ascii')
+    raise ValueError('Input {} is not an instance of bytes or str'
+                     .format(value))
+
+
 def _pack_packet(hostname, service, state, output, timestamp):
     """This is more complicated than a call to struct.pack() because we want
     to pad our strings with random bytes, instead of with zeros."""
@@ -252,7 +268,7 @@ def _pack_packet(hostname, service, state, output, timestamp):
     # compute the CRC32 of what we have so far
     crc_val = binascii.crc32(packet) & 0xffffffff
     struct.pack_into('!L', packet, 4, crc_val)
-    return packet.tostring()
+    return packet.tobytes() if sys.version_info[1] >= 2 else packet.tostring()
 
 
 ########  MAIN CLASS IMPLEMENTATION ########
@@ -328,7 +344,8 @@ class NscaSender(object):
             except:
                 raise ConfigParseError(config_path, line_no, "Could not parse value '%s' for key '%s'" % (value, key))
 
-    def _check_alert(self, host=None, service=None, state=None, description=None):
+    def _check_alert(self, host: bytes = None, service: bytes = None,
+                     state: int = None, description: bytes = None):
         if state not in nagios.States.keys():
             raise ValueError("state %r should be one of {%s}" % (state, ','.join(map(str, nagios.States.keys()))))
         if not isinstance(host, bytes):
@@ -345,7 +362,11 @@ class NscaSender(object):
             if len(service) > MAX_DESCRIPTION_LENGTH:
                 raise ValueError("service %r too long (max length %d)" % (service, MAX_DESCRIPTION_LENGTH))
 
-    def send_service(self, host, service, state, description):
+    def send_service(self, host: Union[str, bytes], service: Union[str, bytes],
+                     state: int, description: Union[str, bytes]):
+        host = _bytes(host)
+        service = _bytes(service)
+        description = _bytes(description)
         self._check_alert(host=host, service=service, state=state, description=description)
         self.connect()
         for conn, iv, timestamp in self._conns:
@@ -356,7 +377,7 @@ class NscaSender(object):
             packet = crypter.encrypt(packet)
             conn.sendall(packet)
 
-    def send_host(self, host, state, description):
+    def send_host(self, host: Union[str, bytes], state: int, description: Union[str, bytes]):
         return self.send_service(host, b'', state, description)
 
     def _sock_connect(self, host, port, timeout=None, connect_all=True):
