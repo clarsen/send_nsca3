@@ -5,7 +5,7 @@ except ImportError:
 
 setup(
     name="send_nsca3",
-    version="0.1.5.3",
+    version="0.1.6.0",
     author="gitmstoute",
     author_email="",
     url="https://github.com/gitmstoute/send_nsca3",
@@ -23,7 +23,7 @@ setup(
     scripts=["bin/py_send_nsca3"],
     packages=["send_nsca3"],
     provides=["send_nsca3"],
-    install_requires=["pycrypto>=2.0.0", 'six'],
+    install_requires=["pycrypto>=2.6.1", 'six'],
     tests_require=["nose", "mock>=1.0.1"],
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown'
