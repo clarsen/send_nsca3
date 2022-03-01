@@ -37,7 +37,6 @@ import Crypto.Cipher.Blowfish
 import Crypto.Cipher.DES
 import Crypto.Cipher.DES3
 import Crypto.Cipher.CAST
-import Crypto.Util.randpool
 import six
 
 from typing import Union
